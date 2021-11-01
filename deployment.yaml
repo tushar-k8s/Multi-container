@@ -37,6 +37,12 @@ spec:
           mountPath: /var/lib/mysql
         - name: init-script
           mountPath: /docker-entrypoint-initdb.d 
+        - name: mysql-logs
+          mountpath: /var/log/mysql/mysql.log
+          
+       - name: sidecar-container
+         image: busybox
+        
       volumes:
       - name: init-script 
         persistentVolumeClaim:
@@ -44,3 +50,6 @@ spec:
       - name: data 
         persistentVolumeClaim:
           claimName: mysql-data-pvc
+      - name: mysql-log
+        persistentVolumeClaim:
+          claimName: mysql-log
