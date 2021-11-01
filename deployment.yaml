@@ -1,0 +1,46 @@
+apiVersion: apps/v1 
+kind: Deployment
+metadata:
+  name: mysql-init-demo
+spec:
+  selector:
+    matchLabels:
+      app: mysql
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      initContainers:
+      - name: init-script-downloader
+        image: appropriate/curl
+        args:
+          - "-o"
+          - "/tmp/data/init.sql" 
+          - "https://raw.githubusercontent.com/kubedb/mysql-init-scripts/master/init.sql" # download url
+        volumeMounts:
+        - name: init-script 
+          mountPath: /tmp/data
+      containers:
+      - image: mysql:5.6
+        name: mysql
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: password
+        ports:
+        - containerPort: 3306
+          name: mysql
+        volumeMounts:
+        - name: data
+          mountPath: /var/lib/mysql
+        - name: init-script
+          mountPath: /docker-entrypoint-initdb.d 
+      volumes:
+      - name: init-script 
+        persistentVolumeClaim:
+          claimName: init-script
+      - name: data 
+        persistentVolumeClaim:
+          claimName: mysql-data-pvc
