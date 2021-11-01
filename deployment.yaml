@@ -55,4 +55,4 @@ spec:
           claimName: mysql-data-pvc
       - name: mysql-log
         persistentVolumeClaim:
-          claimName: mysql-log
+          claimName: mysql-logs-pvc
