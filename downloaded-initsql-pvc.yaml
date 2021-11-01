@@ -5,6 +5,7 @@ metadata:
 spec:
   accessModes:
     - ReadWriteOnce
+  storageClassName: managed-premium
   volumeMode: Filesystem
   resources:
     requests:
