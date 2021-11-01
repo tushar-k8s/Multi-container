@@ -37,11 +37,14 @@ spec:
           mountPath: /var/lib/mysql
         - name: init-script
           mountPath: /docker-entrypoint-initdb.d 
-        - name: mysql-logs
-          mountpath: /var/log/mysql/mysql.log
+ 
           
        - name: sidecar-container
          image: busybox
+         volumeMounts:
+         - name: mysql-logs
+           mountpath: /var/log/mysql/mysql.log
+          
         
       volumes:
       - name: init-script 
